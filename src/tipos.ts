@@ -1,5 +1,5 @@
 export type Prioridade = "baixa" | "media" | "alta";
-export type Status = "pendente" | "em_andamento" | "concluida";
+export type Status = "pendente" | "a fazer" | "feito";
 export interface Tarefa {
   readonly id: number;
   titulo: string;
