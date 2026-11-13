@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TaskFlow</title>
+    <title>Dashboard Viagens</title>
     <link rel="stylesheet" href="./css/taskflow.css" />
   </head>
   <body>
@@ -13,10 +13,47 @@
         <p class="cabecalho__subtitulo"><span id="versao">—</span> · <span id="data-de-hoje">—</span></p>
       </div>
     </header>
+    <form class="formulario" id="formulario">
+      <div class="campo">
+        <label class="campo__rotulo" for="titulo">Título</label>
+        <input class="campo__entrada" id="titulo" type="text" autocomplete="off" />
+
+        <label class="campo__rotulo" for="titulo">Destino</label>
+        <input class="campo__entrada" id="titulo" type="text" autocomplete="off" />
+
+        <label class="campo__rotulo" for="titulo">Local de Origem</label>
+        <input class="campo__entrada" id="titulo" type="text" autocomplete="off" />
+
+        <label class="campo__rotulo" for="titulo">Data da Viagem</label>
+        <input class="campo__entrada" id="titulo" type="text" autocomplete="off" />
+
+        <label class="campo__rotulo" for="titulo">Data de retorno</label>
+        <input class="campo__entrada" id="titulo" type="text" autocomplete="off" />
+
+        <label class="campo__rotulo" for="titulo">Motivo da Viagem</label>
+        <input class="campo__entrada" id="titulo" type="text" autocomplete="off" />
+      </div>
+      <div class="campo">
+        <label class="campo__rotulo" for="prioridade">Prioridade</label>
+        <select class="campo__selecao" id="prioridade">
+          <option value="baixa">Baixa</option>
+          <option value="media" selected>Média</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+      <button class="botao botao--primario" type="submit">Cadastrar</button>
+    </form>
+    <p class="campo__erro" id="erro" role="alert"></p>
     <main>
       <ul class="estatisticas">
-        <li class="estatistica"><span class="estatistica__numero" id="total">0</span><span class="estatistica__rotulo">Total</span></li>
-        <li class="estatistica"><span class="estatistica__numero" id="pendentes">0</span><span class="estatistica__rotulo">Pendentes</span></li>
+        <li class="estatistica">
+          <span class="estatistica__numero" id="total">0</span>
+          <span class="estatistica__rotulo">Total</span>
+        </li>
+        <li class="estatistica">
+          <span class="estatistica__numero" id="pendentes">0</span>
+          <span class="estatistica__rotulo">Pendentes</span>
+        </li>
       </ul>
       <p class="aviso" id="comece-por" hidden></p>
       <ul class="lista" id="lista"></ul>
