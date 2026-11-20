@@ -1,5 +1,5 @@
 import { campo, elemento, selecao } from "./dom";
-import { tarefas } from "./dados";
+import { buscarTarefas } from "./api";
 import type { Prioridade, Tarefa } from "./tipos";
 import { adicionarTarefa, transformar } from "./servicos";
 elemento("nome-do-sistema").textContent = "TaskFlow";
@@ -8,7 +8,7 @@ elemento("data-de-hoje").textContent = new Date().toLocaleDateString("pt-BR");
 
 
 // O estado do programa: a lista que está valendo agora
-const lista: Tarefa[] = [...tarefas];
+const lista: Tarefa[] = [];
 // Uma tarefa vira um <li> pronto para a tela
 
 function criarItem(tarefa: Tarefa): HTMLLIElement {
@@ -38,6 +38,17 @@ function desenhar(): void {
   elemento("pendentes").textContent = String(pendentes);
 }
 
+async function carregarTarefas(): Promise<void> {
+  try {
+    lista.push(...(await buscarTarefas()));
+    elemento("erro").textContent = "";
+    desenhar();
+  } catch (erro) {
+    elemento("erro").textContent =
+      erro instanceof Error ? erro.message : "Não foi possível carregar as tarefas.";
+  }
+}
+
 
 // O formulário: a função abaixo é um CALLBACK — quem a chama é o navegador
 elemento("formulario").addEventListener("submit", (evento) => {
@@ -59,4 +70,5 @@ elemento("formulario").addEventListener("submit", (evento) => {
 });
 8;
 desenhar();
+void carregarTarefas();
 
