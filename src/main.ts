@@ -2,10 +2,9 @@ import { campo, elemento, selecao } from "./dom";
 import { buscarTarefas } from "./api";
 import type { Prioridade, Tarefa } from "./tipos";
 import { adicionarTarefa, transformar } from "./servicos";
-elemento("nome-do-sistema").textContent = "TaskFlow";
+elemento("nome-do-sistema").textContent = "Planejamento De Viagem";
 elemento("versao").textContent = "v0.2.0";
 elemento("data-de-hoje").textContent = new Date().toLocaleDateString("pt-BR");
-
 
 // O estado do programa: a lista que está valendo agora
 const lista: Tarefa[] = [];
@@ -45,10 +44,11 @@ async function carregarTarefas(): Promise<void> {
     desenhar();
   } catch (erro) {
     elemento("erro").textContent =
-      erro instanceof Error ? erro.message : "Não foi possível carregar as tarefas.";
+      erro instanceof Error
+        ? erro.message
+        : "Não foi possível carregar as tarefas.";
   }
 }
-
 
 // O formulário: a função abaixo é um CALLBACK — quem a chama é o navegador
 elemento("formulario").addEventListener("submit", (evento) => {
@@ -71,4 +71,3 @@ elemento("formulario").addEventListener("submit", (evento) => {
 8;
 desenhar();
 void carregarTarefas();
-
