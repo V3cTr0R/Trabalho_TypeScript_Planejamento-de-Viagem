@@ -1,327 +1,282 @@
-/* ============================================================
-   TaskFlow · Dashboard de Viagens
-   ============================================================ */
-
+/* Folha de estilo de referência do TaskFlow. A turma recebe a sua pronta. */
 :root {
-  --cor-fundo: #f4f6fb;
-  --cor-superficie: #ffffff;
-  --cor-borda: #e2e6f0;
-  --cor-texto: #1b2138;
-  --cor-texto-suave: #6b7390;
-  --cor-primaria: #3b5bfd;
-  --cor-primaria-escura: #2c46c9;
-  --cor-erro: #d92d20;
-  --raio: 12px;
-  --sombra: 0 8px 24px rgba(24, 33, 71, 0.08);
-  --largura: 880px;
+  --fundo: #f4f6fa;
+  --cartao: #ffffff;
+  --texto: #1f1f1f;
+  --suave: #5b6472;
+  --azul: #0a468c;
+  --borda: #dfe4ec;
+  --alta: #d64545;
+  --media: #e8892c;
+  --baixa: #2e9e5b;
+  --amarelo: #f9c21a;
 }
-
+:root[data-tema="escuro"] {
+  --fundo: #11161f;
+  --cartao: #1a2130;
+  --texto: #e8ecf2;
+  --suave: #9aa5b5;
+  --azul: #6fa3e8;
+  --borda: #2a3446;
+}
 * {
   box-sizing: border-box;
 }
-
+[hidden] {
+  display: none !important;
+}
 body {
   margin: 0;
-  padding: 40px 20px 72px;
-  font-family:
-    "Inter",
-    "Segoe UI",
-    system-ui,
-    -apple-system,
-    sans-serif;
-  color: var(--cor-texto);
-  background: var(--cor-fundo);
-
-  /* centraliza tudo na horizontal */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  font-family: system-ui, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
 }
-
-/* ---------------- Cabeçalho ---------------- */
 .cabecalho {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  background: var(--azul);
+  color: #fff;
+  flex-wrap: wrap;
 }
-
 .cabecalho__titulo {
   margin: 0;
-  font-size: 1.9rem;
-  letter-spacing: -0.02em;
+  font-size: 1.6rem;
 }
-
 .cabecalho__subtitulo {
-  margin: 6px 0 0;
-  font-size: 0.9rem;
-  color: var(--cor-texto-suave);
+  margin: 4px 0 0;
+  opacity: 0.85;
 }
-
-/* ---------------- Total / Pendentes (ACIMA do formulário) ---------------- */
-.estatisticas {
+.cabecalho__acoes {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  width: 100%;
-  max-width: var(--largura);
-  margin: 0 auto;
-  padding: 0;
-  list-style: none;
-}
-
-.estatistica {
-  flex: 0 1 220px;
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
-  padding: 18px 24px;
-  display: flex;
-  flex-direction: column;
+  gap: 8px;
   align-items: center;
-  gap: 4px;
-  text-align: center;
 }
-
-.estatistica__numero {
-  font-size: 1.8rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--cor-primaria);
+main,
+.entrada {
+  max-width: 880px;
+  margin: 24px auto;
+  padding: 0 16px;
 }
-
-.estatistica__rotulo {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--cor-texto-suave);
-}
-
-/* ---------------- Formulário ---------------- */
-.formulario {
-  width: 100%;
-  max-width: var(--largura);
-  margin: 0 auto;
-  padding: 28px 32px 32px;
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
-  border-radius: 16px;
-  box-shadow: var(--sombra);
-
+.entrada {
+  max-width: 420px;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 3 inputs à esquerda · 3 à direita */
-  gap: 20px 32px;
-}
-
-/* Prioridade ocupa a linha inteira, depois dos 6 campos */
-.campo--prioridade {
-  grid-column: 1 / -1;
-  width: 100%;
-  max-width: 320px;
-  margin: 4px auto 0; /* centraliza a seção de prioridade */
-}
-
-/* Botão centralizado no meio do formulário */
-.botao {
-  grid-column: 1 / -1;
-  justify-self: center;
-  min-width: 220px;
-  padding: 13px 28px;
-  font: inherit;
-  font-weight: 600;
-  color: #fff;
-  background: var(--cor-primaria);
-  border: none;
-  border-radius: var(--raio);
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    transform 0.15s ease;
-}
-
-.botao:hover {
-  background: var(--cor-primaria-escura);
-}
-
-.botao:active {
-  transform: translateY(1px);
-}
-
-.botao:focus-visible {
-  outline: 3px solid rgba(59, 91, 253, 0.35);
-  outline-offset: 2px;
-}
-
-/* ---------------- Campos ---------------- */
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.campo__rotulo {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--cor-texto-suave);
-}
-
-.campo__entrada,
-.campo__selecao {
-  width: 100%;
-  padding: 11px 13px;
-  font: inherit;
-  font-size: 0.95rem;
-  color: var(--cor-texto);
-  background: #fbfcff;
-  border: 1px solid var(--cor-borda);
-  border-radius: 10px;
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.campo__entrada:focus,
-.campo__selecao:focus {
-  outline: none;
-  border-color: var(--cor-primaria);
-  box-shadow: 0 0 0 3px rgba(59, 91, 253, 0.15);
-  background: #fff;
-}
-
-/* ---------------- Erro / aviso / lista ---------------- */
-.campo__erro {
-  width: 100%;
-  max-width: var(--largura);
-  margin: 0;
-  min-height: 1.2em;
-  font-size: 0.88rem;
-  color: var(--cor-erro);
-  text-align: center;
-}
-
-.aviso {
-  width: 100%;
-  max-width: var(--largura);
-  margin: 0;
-  color: var(--cor-texto-suave);
-  text-align: center;
-}
-
-.aviso[hidden] {
-  display: none;
-}
-
-.lista {
-  width: 100%;
-  max-width: var(--largura);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
   gap: 12px;
 }
-
-/* ---------------- Item da lista (.tarefa) ----------------
-   ESTAVA FALTANDO: sem estas regras o <h3> e o <span> ficam
-   soltos, um sobre o outro, e a lista parece "não aparecer".
-   --------------------------------------------------------- */
-.tarefa {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 2px 16px;
-  padding: 14px 18px;
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
-  border-left: 6px solid var(--cor-borda);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
-}
-
-.tarefa--baixa {
-  border-left-color: #12b76a;
-}
-
-.tarefa--media {
-  border-left-color: #f79009;
-}
-
-.tarefa--alta {
-  border-left-color: #d92d20;
-}
-
-.tarefa__titulo {
-  grid-column: 1;
-  grid-row: 1;
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-}
-
-.tarefa__meta {
-  grid-column: 1 / -1;
-  grid-row: 2;
+.formulario {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
-  margin: 6px 0 0;
-  font-size: 0.82rem;
-  color: var(--cor-texto-suave);
+  gap: 12px;
+  align-items: flex-end;
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 16px;
 }
-
-.tarefa__meta:empty {
+.entrada .formulario {
+  flex-direction: column;
+  align-items: stretch;
+}
+.entrada .campo {
+  flex: none;
+}
+.formulario h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.campo {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 160px;
+}
+.campo__rotulo {
+  font-size: 0.85rem;
+  color: var(--suave);
+}
+.campo__entrada,
+.campo__selecao,
+.busca {
+  padding: 8px 10px;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  background: var(--cartao);
+  color: var(--texto);
+  font: inherit;
+}
+.campo__erro {
+  color: var(--alta);
+  min-height: 1.2em;
+  margin: 8px 0;
+}
+.botao {
+  padding: 8px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  background: var(--cartao);
+  color: var(--texto);
+  font: inherit;
+  cursor: pointer;
+}
+.botao--primario {
+  background: var(--azul);
+  color: #fff;
+  border-color: var(--azul);
+}
+.botao--pequeno {
+  padding: 4px 10px;
+  font-size: 0.85rem;
+}
+.botao--sucesso {
+  border-color: var(--baixa);
+  color: var(--baixa);
+}
+.botao--perigo {
+  border-color: var(--alta);
+  color: var(--alta);
+}
+.aviso {
+  background: #fff6d6;
+  color: #5c4600;
+  border-left: 4px solid var(--amarelo);
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+.aviso--oculto {
   display: none;
 }
-
-.etiqueta {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: end;
-  align-self: start;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.72rem;
+.estatisticas {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  /* grid-template-columns: repeat(4, 1fr); */
+  gap: 12px;
+}
+.estatistica {
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  width: 150px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.324);
+}
+.estatistica__numero {
+  display: block;
+  font-size: 1.8rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
+  color: var(--azul);
 }
-
-.etiqueta--baixa {
-  background: #e7f8ef;
-  color: #0b7a45;
+.estatistica__rotulo {
+  font-size: 0.85rem;
+  color: var(--suave);
 }
-
-.etiqueta--media {
-  background: #fef4e6;
-  color: #b54708;
+.filtros {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0;
 }
-
+.filtros__grupo {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.filtro {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--borda);
+  background: var(--cartao);
+  color: var(--texto);
+  cursor: pointer;
+}
+.filtro--ativo {
+  background: var(--azul);
+  color: #fff;
+  border-color: var(--azul);
+}
+.lista {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.tarefa {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-left: 6px solid var(--media);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.tarefa--alta {
+  border-left-color: var(--alta);
+}
+.tarefa--baixa {
+  border-left-color: var(--baixa);
+}
+.tarefa--concluida {
+  opacity: 0.6;
+}
+.tarefa--concluida .tarefa__titulo {
+  text-decoration: line-through;
+}
+.tarefa--atrasada {
+  box-shadow: inset 0 0 0 2px var(--alta);
+}
+.tarefa__titulo {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+.tarefa__descricao {
+  margin: 0 0 6px;
+  color: var(--suave);
+}
+.tarefa__meta,
+.tarefa__acoes {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.etiqueta,
+.tag {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--borda);
+}
 .etiqueta--alta {
-  background: #fee4e2;
-  color: #b42318;
+  color: var(--alta);
 }
-
-/* ---------------- Responsivo ---------------- */
-@media (max-width: 720px) {
-  body {
-    padding: 24px 16px 56px;
-  }
-
-  .formulario {
-    grid-template-columns: 1fr; /* uma coluna no mobile */
-    padding: 22px 20px 26px;
-  }
-
-  .campo--prioridade {
-    max-width: 100%;
-  }
-
-  .estatistica {
-    flex: 1 1 100%;
+.etiqueta--media {
+  color: var(--media);
+}
+.etiqueta--baixa {
+  color: var(--baixa);
+}
+.tag {
+  color: var(--suave);
+}
+.etiqueta--status {
+  color: var(--suave);
+}
+.tarefa__principal {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+.vazio {
+  text-align: center;
+  color: var(--suave);
+}
+@media (max-width: 600px) {
+  .estatisticas {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

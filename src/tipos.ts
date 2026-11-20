@@ -1,17 +1,14 @@
 export type Prioridade = "baixa" | "media" | "alta";
-
-export type Status = "pendente" | "concluida";
-
+export type Status = "pendente" | "a fazer" | "feito";
 export interface Tarefa {
-  id: number;
+  readonly id: number;
   titulo: string;
+  descricao?: string;
   prioridade: Prioridade;
   status: Status;
   tags: string[];
-  // Campos da viagem (opcionais: a tarefa pode existir só com título)
-  destino?: string;
-  origem?: string;
-  dataViagem?: string;
-  dataRetorno?: string;
-  motivo?: string;
+  criadaEm: Date;
 }
+// O que o usuário informa ao cadastrar:
+// id, status e criadaEm são responsabilidade do sistema
+export type NovaTarefa = Omit<Tarefa, "id" | "status" | "criadaEm">;
