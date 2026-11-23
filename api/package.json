@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/servidor.ts",
     "verificar": "tsc --noEmit"
-},
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

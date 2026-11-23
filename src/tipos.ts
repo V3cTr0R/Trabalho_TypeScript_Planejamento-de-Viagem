@@ -4,6 +4,11 @@ export interface Tarefa {
   readonly id: number;
   titulo: string;
   descricao?: string;
+  destino?: string;
+  origem?: string;
+  dataViagem?: string;
+  dataRetorno?: string;
+  motivo?: string;
   prioridade: Prioridade;
   status: Status;
   tags: string[];

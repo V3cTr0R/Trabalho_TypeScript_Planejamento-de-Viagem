@@ -128,10 +128,18 @@ body {
   margin: 4px auto 0; /* centraliza a seção de prioridade */
 }
 
-/* Botão centralizado no meio do formulário */
-.botao {
+/* Ações centralizadas no formulário */
+.acoes-formulario {
   grid-column: 1 / -1;
-  justify-self: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.botao {
+  grid-column: auto;
+  justify-self: auto;
   min-width: 220px;
   padding: 13px 28px;
   font: inherit;
@@ -148,6 +156,15 @@ body {
 
 .botao:hover {
   background: var(--cor-primaria-escura);
+}
+
+.botao--secundario {
+  color: var(--cor-texto);
+  background: #e9edf7;
+}
+
+.botao--secundario:hover {
+  background: #dce2f0;
 }
 
 .botao:active {
