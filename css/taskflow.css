@@ -15,8 +15,13 @@
   --sombra: 0 8px 24px rgba(24, 33, 71, 0.08);
   --largura: 880px;
 }
-
+html,
+body {
+  height: 100%;
+}
 * {
+  padding: 0px;
+  margin: 0px;
   box-sizing: border-box;
 }
 
@@ -45,9 +50,11 @@ body {
 }
 
 .cabecalho__titulo {
+  font-family: 'Times New Roman', Times, serif;
   margin: 0;
-  font-size: 1.9rem;
+  font-size: 40px;
   letter-spacing: -0.02em;
+  
 }
 
 .cabecalho__subtitulo {
@@ -323,5 +330,24 @@ body {
 
   .estatistica {
     flex: 1 1 100%;
+  }
+}
+footer {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 20px;
+  font-style: italic;
+  padding: 20px;
+  width: 110%;
+  background-color: #000000fc;
+  p{
+    color: whitesmoke;
+    margin: 12px;
+  }
+  h3{
+    font-style: normal;
+    color: white;
+    font-weight: normal;
   }
 }
