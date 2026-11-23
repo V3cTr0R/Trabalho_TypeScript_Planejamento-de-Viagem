@@ -1,4 +1,4 @@
-import type { Prioridade, Status, Tarefa } from "./tipos";
+import type { NovaTarefa, Prioridade, Status, Tarefa } from "./tipos";
 
 function isObjeto(valor: unknown): valor is Record<string, unknown> {
   return typeof valor === "object" && valor !== null && !Array.isArray(valor);
@@ -16,12 +16,27 @@ function isListaDeStrings(valor: unknown): valor is string[] {
   return Array.isArray(valor) && valor.every((item: unknown) => typeof item === "string");
 }
 
+function textoOpcional(valor: unknown, campo: string): string | undefined {
+  if (valor === undefined || valor === null) {
+    return undefined;
+  }
+  if (typeof valor !== "string") {
+    throw new Error(`A API retornou um valor inválido para ${campo}.`);
+  }
+  return valor;
+}
+
 function converterTarefa(valor: unknown): Tarefa {
   if (!isObjeto(valor)) {
     throw new Error("A API retornou uma tarefa inválida.");
   }
 
   const { id, titulo, descricao, prioridade, status, tags, criadaEm } = valor;
+  const destino = textoOpcional(valor.destino, "destino");
+  const origem = textoOpcional(valor.origem, "origem");
+  const dataViagem = textoOpcional(valor.dataViagem, "data da viagem");
+  const dataRetorno = textoOpcional(valor.dataRetorno, "data de retorno");
+  const motivo = textoOpcional(valor.motivo, "motivo");
   const dataCriacao = typeof criadaEm === "string" ? new Date(criadaEm) : null;
 
   if (
@@ -41,6 +56,11 @@ function converterTarefa(valor: unknown): Tarefa {
     id,
     titulo,
     ...(typeof descricao === "string" ? { descricao } : {}),
+    ...(destino === undefined ? {} : { destino }),
+    ...(origem === undefined ? {} : { origem }),
+    ...(dataViagem === undefined ? {} : { dataViagem }),
+    ...(dataRetorno === undefined ? {} : { dataRetorno }),
+    ...(motivo === undefined ? {} : { motivo }),
     prioridade,
     status,
     tags,
@@ -61,4 +81,23 @@ export async function buscarTarefas(): Promise<Tarefa[]> {
   }
 
   return dados.map(converterTarefa);
+}
+
+export async function cadastrarTarefa(tarefa: NovaTarefa): Promise<Tarefa> {
+  const resposta = await fetch("/api/tarefas", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(tarefa),
+  });
+  const dados: unknown = await resposta.json();
+
+  if (!resposta.ok) {
+    const mensagem =
+      isObjeto(dados) && typeof dados.erro === "string"
+        ? dados.erro
+        : `Não foi possível cadastrar a tarefa (HTTP ${resposta.status}).`;
+    throw new Error(mensagem);
+  }
+
+  return converterTarefa(dados);
 }

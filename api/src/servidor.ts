@@ -1,7 +1,7 @@
 import "dotenv/config"; // primeira linha: carrega o .env antes de tudo
 import express from "express";
 import type { ErrorRequestHandler } from "express";
-import type { RowDataPacket } from "mysql2";
+import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { banco } from "./banco";
 const app = express();
 app.use(express.json());
@@ -9,7 +9,10 @@ app.use(express.json());
 // O SELECT que as duas rotas usam. Os "AS" trocam o nome da coluna
 // do jeito do banco (criada_em) para o jeito do TypeScript (criadaEm).
 const SELECT_TAREFAS = `
-SELECT id, titulo, descricao, prioridade,
+SELECT id, titulo, descricao, destino, origem,
+DATE_FORMAT(data_viagem, '%Y-%m-%d') AS dataViagem,
+DATE_FORMAT(data_retorno, '%Y-%m-%d') AS dataRetorno,
+motivo, prioridade,
 CASE status
   WHEN 'em_andamento' THEN 'a fazer'
   WHEN 'concluida' THEN 'feito'
@@ -44,6 +47,87 @@ return;
 res.json({ ...linhas[0], tags: [] });
 });
 
+function isObjeto(valor: unknown): valor is Record<string, unknown> {
+return typeof valor === "object" && valor !== null && !Array.isArray(valor);
+}
+
+function isPrioridade(valor: unknown): valor is "baixa" | "media" | "alta" {
+return valor === "baixa" || valor === "media" || valor === "alta";
+}
+
+function isDataValida(valor: string): boolean {
+if (!/^\d{4}-\d{2}-\d{2}$/.test(valor)) return false;
+const data = new Date(`${valor}T00:00:00.000Z`);
+return !Number.isNaN(data.getTime()) && data.toISOString().slice(0, 10) === valor;
+}
+
+app.post("/api/tarefas", async (req, res) => {
+if (!isObjeto(req.body)) {
+res.status(400).json({ erro: "O corpo da requisição deve ser um objeto JSON." });
+return;
+}
+
+const { titulo, prioridade } = req.body;
+if (typeof titulo !== "string" || titulo.trim().length < 3 || titulo.trim().length > 120) {
+res.status(400).json({ erro: "O título deve ter entre 3 e 120 caracteres." });
+return;
+}
+if (!isPrioridade(prioridade)) {
+res.status(400).json({ erro: "A prioridade deve ser baixa, media ou alta." });
+return;
+}
+
+const camposTexto = ["destino", "origem", "motivo"] as const;
+if (camposTexto.some((campo) =>
+req.body[campo] !== undefined &&
+req.body[campo] !== null &&
+typeof req.body[campo] !== "string"
+)) {
+res.status(400).json({ erro: "Destino, origem e motivo devem ser textos." });
+return;
+}
+
+const destino = typeof req.body.destino === "string" ? req.body.destino.trim() || null : null;
+const origem = typeof req.body.origem === "string" ? req.body.origem.trim() || null : null;
+const motivo = typeof req.body.motivo === "string" ? req.body.motivo.trim() || null : null;
+if ((destino?.length ?? 0) > 120 || (origem?.length ?? 0) > 120 || (motivo?.length ?? 0) > 255) {
+res.status(400).json({ erro: "Destino e origem aceitam até 120 caracteres; motivo, até 255." });
+return;
+}
+
+const dataViagem = typeof req.body.dataViagem === "string" && req.body.dataViagem !== ""
+? req.body.dataViagem
+: null;
+const dataRetorno = typeof req.body.dataRetorno === "string" && req.body.dataRetorno !== ""
+? req.body.dataRetorno
+: null;
+if (
+(req.body.dataViagem !== undefined && req.body.dataViagem !== null && typeof req.body.dataViagem !== "string") ||
+(req.body.dataRetorno !== undefined && req.body.dataRetorno !== null && typeof req.body.dataRetorno !== "string") ||
+(dataViagem !== null && !isDataValida(dataViagem)) ||
+(dataRetorno !== null && !isDataValida(dataRetorno))
+) {
+res.status(400).json({ erro: "As datas devem estar no formato AAAA-MM-DD." });
+return;
+}
+if (dataViagem && dataRetorno && dataRetorno < dataViagem) {
+res.status(400).json({ erro: "A data de retorno não pode ser anterior à data da viagem." });
+return;
+}
+
+const [resultado] = await banco.execute<ResultSetHeader>(
+`INSERT INTO tarefas
+(titulo, destino, origem, data_viagem, data_retorno, motivo, prioridade)
+VALUES (?, ?, ?, ?, ?, ?, ?)`,
+[titulo.trim(), destino, origem, dataViagem, dataRetorno, motivo, prioridade]
+);
+const [linhas] = await banco.execute<RowDataPacket[]>(
+`${SELECT_TAREFAS} WHERE id = ?`,
+[resultado.insertId]
+);
+res.status(201).json({ ...linhas[0], tags: [] });
+});
+
 app.use("/api", (_req, res) => {
 res.status(404).json({ erro: "Rota da API não encontrada." });
 });
@@ -64,4 +148,4 @@ erro: bancoIndisponivel ? "Banco de dados indisponível." : "Erro interno da API
 };
 app.use(tratarErro);
 
-app.listen(3000, "0.0.0.0", () => console.log("API do TaskFlow em http://localhost:3000"));
+app.listen(3001, "0.0.0.0", () => console.log("API do TaskFlow em http://localhost:3001"));
