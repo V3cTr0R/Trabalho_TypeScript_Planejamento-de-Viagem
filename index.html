@@ -8,10 +8,39 @@
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5495/5495443.png" type="image/x-icon">
   </head>
   <body>
+    <div class="login" id="login" role="dialog" aria-modal="true" aria-labelledby="login-titulo">
+      <form class="login__cartao" id="form-login">
+        <div class="login__icone" aria-hidden="true">✈</div>
+        <h2 id="login-titulo">Acesse o Planejamento</h2>
+        <p class="login__descricao" id="login-descricao">Entre para gerenciar suas viagens.</p>
+        <div class="campo">
+          <label class="campo__rotulo" for="usuario">Usuário</label>
+          <input class="campo__entrada" id="usuario" name="usuario" autocomplete="username" />
+        </div>
+        <div class="campo">
+          <label class="campo__rotulo" for="senha">Senha</label>
+          <input class="campo__entrada" id="senha" name="senha" type="password" autocomplete="current-password" />
+        </div>
+        <div class="campo" id="campo-confirmar-senha" hidden>
+          <label class="campo__rotulo" for="confirmar-senha">Confirmar senha</label>
+          <input class="campo__entrada" id="confirmar-senha" name="confirmar-senha" type="password" autocomplete="new-password" />
+        </div>
+        <p class="campo__erro" id="erro-login" role="alert"></p>
+        <button class="botao botao--primario" id="botao-login" type="submit">Entrar</button>
+        <button class="botao botao--secundario" id="botao-criar-conta" type="button">Criar conta</button>
+        <button class="botao botao--texto" id="botao-voltar-login" type="button" hidden>Já tenho uma conta</button>
+      </form>
+    </div>
+
     <header class="cabecalho">
       <h1 class="cabecalho__titulo"><span id="nome-do-sistema"></span></h1>
+      <p class="cabecalho__subtitulo">
         <span id="versao">—</span> · <span id="data-de-hoje">—</span>
       </p>
+      <div class="cabecalho__acoes">
+        <button class="botao-tema" id="botao-tema" type="button" aria-label="Ativar tema escuro">🌙 Tema escuro</button>
+        <button class="botao-tema" id="botao-sair" type="button">Sair</button>
+      </div>
     </header>
 
     <!-- Total / Pendentes: ACIMA do formulário, centralizados -->

@@ -101,3 +101,47 @@ export async function cadastrarTarefa(tarefa: NovaTarefa): Promise<Tarefa> {
 
   return converterTarefa(dados);
 }
+
+export async function alterarTarefa(id: number, tarefa: NovaTarefa): Promise<Tarefa> {
+  const resposta = await fetch(`/api/tarefas/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(tarefa),
+  });
+  const dados: unknown = await resposta.json();
+  if (!resposta.ok) {
+    const mensagem =
+      isObjeto(dados) && typeof dados.erro === "string"
+        ? dados.erro
+        : `Não foi possível alterar a tarefa (HTTP ${resposta.status}).`;
+    throw new Error(mensagem);
+  }
+  return converterTarefa(dados);
+}
+
+export async function concluirTarefa(id: number): Promise<Tarefa> {
+  const resposta = await fetch(`/api/tarefas/${id}/concluir`, {
+    method: "PATCH",
+  });
+  const dados: unknown = await resposta.json();
+  if (!resposta.ok) {
+    const mensagem =
+      isObjeto(dados) && typeof dados.erro === "string"
+        ? dados.erro
+        : `Não foi possível concluir a tarefa (HTTP ${resposta.status}).`;
+    throw new Error(mensagem);
+  }
+  return converterTarefa(dados);
+}
+
+export async function excluirTarefa(id: number): Promise<void> {
+  const resposta = await fetch(`/api/tarefas/${id}`, { method: "DELETE" });
+  if (!resposta.ok) {
+    const dados: unknown = await resposta.json();
+    const mensagem =
+      isObjeto(dados) && typeof dados.erro === "string"
+        ? dados.erro
+        : `Não foi possível excluir a tarefa (HTTP ${resposta.status}).`;
+    throw new Error(mensagem);
+  }
+}
