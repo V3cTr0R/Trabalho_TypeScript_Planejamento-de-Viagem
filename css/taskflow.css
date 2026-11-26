@@ -15,6 +15,17 @@
   --sombra: 0 8px 24px rgba(24, 33, 71, 0.08);
   --largura: 880px;
 }
+:root[data-theme="escuro"] {
+  --cor-fundo: #111827;
+  --cor-superficie: #1f2937;
+  --cor-borda: #374151;
+  --cor-texto: #f9fafb;
+  --cor-texto-suave: #bac3d3;
+  --cor-primaria: #7c93ff;
+  --cor-primaria-escura: #6478db;
+  --cor-erro: #fda29b;
+  --sombra: 0 8px 24px rgba(0, 0, 0, 0.24);
+}
 html,
 body {
   height: 100%;
@@ -61,6 +72,89 @@ body {
   margin: 6px 0 0;
   font-size: 0.9rem;
   color: var(--cor-texto-suave);
+}
+
+.cabecalho__acoes {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.botao-tema {
+  padding: 8px 12px;
+  color: var(--cor-texto);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.login {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(17, 24, 39, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.login--oculto {
+  display: none;
+}
+
+.login__cartao {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 32px;
+  text-align: center;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+}
+
+.login__icone {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 4px;
+  color: #fff;
+  background: var(--cor-primaria);
+  border-radius: 50%;
+  font-size: 28px;
+}
+
+.login__descricao {
+  margin-bottom: 4px;
+  color: var(--cor-texto-suave);
+}
+
+.login__cartao .campo {
+  text-align: left;
+}
+
+.login__cartao .botao {
+  width: 100%;
+}
+
+.login__cartao .botao--texto {
+  min-width: 0;
+  padding: 7px 12px;
+  color: var(--cor-primaria);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.login__cartao [hidden] {
+  display: none;
 }
 
 /* ---------------- Total / Pendentes (ACIMA do formulário) ---------------- */
@@ -213,6 +307,19 @@ body {
   background: #fff;
 }
 
+:root[data-theme="escuro"] .campo__entrada,
+:root[data-theme="escuro"] .campo__selecao,
+:root[data-theme="escuro"] .botao--secundario {
+  color: var(--cor-texto);
+  background: #111827;
+  border-color: var(--cor-borda);
+}
+
+:root[data-theme="escuro"] .campo__entrada:focus,
+:root[data-theme="escuro"] .campo__selecao:focus {
+  background: #111827;
+}
+
 /* ---------------- Erro / aviso / lista ---------------- */
 .campo__erro {
   width: 100%;
@@ -328,6 +435,49 @@ body {
 .etiqueta--alta {
   background: #fee4e2;
   color: #b42318;
+}
+
+.tarefa__acoes {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.acao {
+  min-width: 82px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+}
+
+.acao--concluir {
+  color: #067647;
+  border-color: #12b76a;
+}
+
+.acao--excluir {
+  color: var(--cor-erro);
+  border-color: var(--cor-erro);
+}
+
+.acao:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+:root[data-theme="escuro"] .tarefa--concluida,
+.tarefa:has(.acao--concluir:disabled) {
+  opacity: 0.72;
 }
 
 /* ---------------- Responsivo ---------------- */

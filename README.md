@@ -22,7 +22,7 @@ Crie um usuário local para a API. Abra o cliente (`mariadb -u root -p` ou `sudo
 
 ```sql
 CREATE USER 'taskflow_api'@'127.0.0.1' IDENTIFIED BY 'SENHA_LOCAL_FORTE';
-GRANT SELECT, INSERT ON taskflow.* TO 'taskflow_api'@'127.0.0.1';
+GRANT SELECT, INSERT, UPDATE, DELETE ON taskflow.* TO 'taskflow_api'@'127.0.0.1';
 ```
 
 Copie o exemplo de configuração e use a mesma senha:
@@ -31,7 +31,7 @@ Copie o exemplo de configuração e use a mesma senha:
 cp api/.env.exemplo api/.env
 ```
 
-Edite `api/.env` e substitua `DB_SENHA`. Esse arquivo é local e não deve ser enviado ao Git. A permissão `INSERT` é necessária para o botão **Cadastrar** salvar novos registros.
+Edite `api/.env` e substitua `DB_SENHA`. Esse arquivo é local e não deve ser enviado ao Git. As permissões `INSERT`, `UPDATE` e `DELETE` são necessárias para cadastrar, alterar, concluir e excluir viagens.
 
 > Não use `database/viagens.sql` para inicializar este projeto: ele contém `DROP DATABASE IF EXISTS taskflow` e pode apagar dados existentes. O arquivo `database/setup-taskflow.sql` cria a estrutura sem inserir dados de exemplo.
 
