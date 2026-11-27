@@ -1,4 +1,4 @@
-import { campo, elemento, selecao } from "./dom";
+import { campo, elemento } from "./dom";
 import {
   alterarTarefa,
   buscarTarefas,
@@ -6,7 +6,7 @@ import {
   concluirTarefa,
   excluirTarefa,
 } from "./api";
-import type { Prioridade, Tarefa } from "./tipos";
+import type { Tarefa } from "./tipos";
 import { transformar } from "./servicos";
 elemento("nome-do-sistema").textContent = "Planejamento De Viagem";
 elemento("versao").textContent = "v0.2.0";
@@ -107,7 +107,6 @@ function limparFormulario(): void {
   for (const id of ["titulo", "destino", "origem", "data-viagem", "data-retorno", "motivo"]) {
     campo(id).value = "";
   }
-  selecao("prioridade").value = "media";
   viagemEmEdicao = null;
   const botaoCadastrar = document.querySelector<HTMLButtonElement>(
     '#formulario button[type="submit"]',
@@ -124,7 +123,6 @@ function iniciarEdicao(tarefa: Tarefa): void {
   campo("data-viagem").value = tarefa.dataViagem ?? "";
   campo("data-retorno").value = tarefa.dataRetorno ?? "";
   campo("motivo").value = tarefa.motivo ?? "";
-  selecao("prioridade").value = tarefa.prioridade;
   const botaoCadastrar = document.querySelector<HTMLButtonElement>(
     '#formulario button[type="submit"]',
   );
@@ -142,6 +140,9 @@ async function cadastrar(): Promise<void> {
   if (botaoLimpar) botaoLimpar.disabled = true;
   elemento("erro").textContent = "";
   try {
+    const tarefaAtual = viagemEmEdicao === null
+      ? undefined
+      : lista.find((tarefa) => tarefa.id === viagemEmEdicao);
     const dados = {
       titulo: campo("titulo").value.trim(),
       destino: campo("destino").value.trim() || undefined,
@@ -149,7 +150,7 @@ async function cadastrar(): Promise<void> {
       dataViagem: campo("data-viagem").value || undefined,
       dataRetorno: campo("data-retorno").value || undefined,
       motivo: campo("motivo").value.trim() || undefined,
-      prioridade: selecao("prioridade").value as Prioridade,
+      prioridade: tarefaAtual?.prioridade ?? "media",
       tags: [],
     };
     if (viagemEmEdicao !== null) {
@@ -224,9 +225,14 @@ elemento("botao-tema").addEventListener("click", () => {
 
 function entrar(usuario: string): void {
   localStorage.setItem("usuario-logado", usuario);
+  atualizarUsuario(usuario);
   elemento("login").classList.add("login--oculto");
   elemento("erro").textContent = "";
   void carregarTarefas();
+}
+
+function atualizarUsuario(usuario: string | null): void {
+  elemento("usuario-logado").textContent = usuario ? `Olá, ${usuario}` : "";
 }
 
 interface ContaLocal {
@@ -321,6 +327,7 @@ elemento("botao-voltar-login").addEventListener("click", () => {
 
 elemento("botao-sair").addEventListener("click", () => {
   localStorage.removeItem("usuario-logado");
+  atualizarUsuario(null);
   lista.splice(0);
   desenhar();
   campo("usuario").value = "";
@@ -333,10 +340,12 @@ elemento("botao-sair").addEventListener("click", () => {
 
 const usuarioLogado = localStorage.getItem("usuario-logado");
 if (usuarioLogado) {
+  atualizarUsuario(usuarioLogado);
   elemento("login").classList.add("login--oculto");
   desenhar();
   void carregarTarefas();
 } else {
+  atualizarUsuario(null);
   desenhar();
   campo("usuario").focus();
 }

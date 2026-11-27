@@ -91,6 +91,19 @@ body {
   cursor: pointer;
 }
 
+.usuario-logado {
+  align-self: center;
+  padding: 8px 12px;
+  color: var(--cor-texto-suave);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .login {
   position: fixed;
   z-index: 100;
@@ -212,14 +225,6 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr; /* 3 inputs à esquerda · 3 à direita */
   gap: 20px 32px;
-}
-
-/* Prioridade ocupa a linha inteira, depois dos 6 campos */
-.campo--prioridade {
-  grid-column: 1 / -1;
-  width: 100%;
-  max-width: 320px;
-  margin: 4px auto 0; /* centraliza a seção de prioridade */
 }
 
 /* Ações centralizadas no formulário */
@@ -489,10 +494,6 @@ body {
   .formulario {
     grid-template-columns: 1fr; /* uma coluna no mobile */
     padding: 22px 20px 26px;
-  }
-
-  .campo--prioridade {
-    max-width: 100%;
   }
 
   .estatistica {
